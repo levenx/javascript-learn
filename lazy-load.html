@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>LozyLoad</title>
+    <style>
+        .images {
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+            width: 500px;
+        }
+
+        .img-item {
+            height: 400px;
+            width: 400px;
+            margin: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="images">
+        <img class="img-item" alt="loading" data-src="./img/1.png">
+        <img class="img-item" id="img2" alt="loading" data-src="./img/2.png">
+        <img class="img-item" alt="loading" data-src="./img/3.png">
+        <img class="img-item" alt="loading" data-src="./img/4.png">
+        <img class="img-item" alt="loading" data-src="./img/5.png">
+        <img class="img-item" alt="loading" data-src="./img/6.png">
+        <img class="img-item" alt="loading" data-src="./img/7.png">
+    </div>
+    <script type="text/javascript">
+        var imgs = document.querySelectorAll('img');
+        var lazyload = function () {
+            var scrollTop = document.body.scrollTop || document.documentElement.scrollTop
+            var winTop = window.innerHeight
+            for (var i = 0; i < imgs.length; i++) {
+                if (imgs[i].offsetTop <= scrollTop + winTop) {
+                    imgs[i].src = imgs[i].getAttribute('data-src')
+                }
+            }
+        }
+        function debounce(method, delay) {
+            let timer = null
+            return function () {
+                var scrollTop = document.body.scrollTop || document.documentElement.scrollTop
+                let args = arguments
+                clearTimeout(timer)
+                timer = setTimeout(function () {
+                    console.log(this)
+                    method.apply(this.args)
+                }, delay)
+            }
+        }
+        lazyload()
+        window.onscroll = debounce(lazyload, 200)
+    </script>
+
+    <!-- <script type="text/javascript">
+        //获取观察器实例  changes是被观察的对象数组
+        var observer = new IntersectionObserver(function(changes){  
+            console.log(changes);
+            changes.forEach(function(index,item){
+                if(item.intersectionRatio > 0 && item.intersectionRatio < 1)
+                    //target：被观察的目标元素，是一个 DOM 节点对象
+                    item.target.src = item.target.dataset.src;
+            });
+        });
+        function addObserver(){
+            var listItems = document.querySelectorAll('.img-item');
+            listItems.forEach(function(item){
+                //实例的observe方法可以指定观察哪个DOM节点
+                //开始观察  observe的参数是一个 DOM 节点对象
+                observer.observe(item);
+            });
+        }
+        addObserver();
+    </script> -->
+
+</body>
+
+</html>
